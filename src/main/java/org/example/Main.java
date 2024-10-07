@@ -11,8 +11,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -42,7 +43,11 @@ public class Main {
         String url = "https://app.bilibili.com/x/wall/unicom/order/pack/receive";
         String body = "cross_domain=true&id=3&csrf=51f92d671aa194acc592d4dd52c1ff2b";
         JSONObject res;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
         for (int i = 0; i < 6; i++) {
+            System.out.println("The time is: " + formattedDateTime);
             res = post(url, body, cookie);
             System.out.println(res);
             int resCode = (Integer) res.get("code");
