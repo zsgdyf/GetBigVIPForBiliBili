@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import java.util.Base64;
 
 import java.util.Map;
 
@@ -30,7 +31,13 @@ public class Main {
     );
 
     public static void main(String[] args) {
-        String cookie = args[0];
+        String encodedString = args[0];
+        // 获取解码器
+        Base64.Decoder decoder = Base64.getDecoder();
+        // 解码 Base64 字符串
+        byte[] decodedBytes = decoder.decode(encodedString);
+        // 将解码后的字节数组转换为字符串
+        String cookie = new String(decodedBytes);
         String url = "https://app.bilibili.com/x/wall/unicom/order/pack/receive";
         String body = "cross_domain=true&id=3&csrf=51f92d671aa194acc592d4dd52c1ff2b";
         JSONObject res = post(url, body, cookie);
