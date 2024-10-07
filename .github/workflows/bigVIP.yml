@@ -1,11 +1,11 @@
-# 每天00:00:01执行
+# 每天 23:59:00 执行
 # UTC 时间，北京时间需要 UTC+8
 name: Start
 
 on:
    workflow_dispatch:
    schedule:
-       - cron: '0 16 * * *'
+       - cron: '59 15 * * *'
 
 jobs:
   build:

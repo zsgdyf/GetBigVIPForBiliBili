@@ -11,11 +11,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Map;
 
+import static java.lang.Thread.sleep;
 import static java.util.Map.entry;
 
 
@@ -32,7 +35,7 @@ public class Main {
             78117, "该手机号/账号本月已兑换福利点达上限"
     );
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String encodedString = args[0];
         // 获取解码器
         Base64.Decoder decoder = Base64.getDecoder();
@@ -43,19 +46,36 @@ public class Main {
         String url = "https://app.bilibili.com/x/wall/unicom/order/pack/receive";
         String body = "cross_domain=true&id=3&csrf=51f92d671aa194acc592d4dd52c1ff2b";
         JSONObject res;
+        // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         String formattedDateTime = now.format(formatter);
-        for (int i = 0; i < 6; i++) {
+        // 获取当前日期
+        LocalDate today = LocalDate.now();
+        // 获取当前年份
+        int year = today.getYear();
+        // 获取当前月份
+        int month = today.getMonthValue();
+        // 获取当前日期（日）
+        int day = today.getDayOfMonth();
+        LocalDateTime specifiedTime = LocalDateTime.of(year, month, day, 15, 59, 59);
+        // 计算两个时间之间的差异（秒）
+        long secondsBetween = ChronoUnit.SECONDS.between(now, specifiedTime);
+        if (secondsBetween < 0) {
+            return;
+        }
+        sleep(secondsBetween * 1000);
+        for (int i = 0; i < 10; i++) {
             System.out.println("The time is: " + formattedDateTime);
             res = post(url, body, cookie);
             System.out.println(res);
             int resCode = (Integer) res.get("code");
-            String converMessage = resMap.get(resCode);
-            System.out.println(converMessage);
+            String convertMessage = resMap.get(resCode);
+            System.out.println(convertMessage);
             if (resCode == 0) {
                 break;
             }
+            sleep(200);
         }
     }
 
