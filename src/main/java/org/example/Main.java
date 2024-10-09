@@ -64,8 +64,12 @@ public class Main {
         if (secondsBetween < 0) {
             return;
         }
+        System.out.println("The time is: " + formattedDateTime);
+        System.out.println("sleep: " + secondsBetween +" s");
         sleep(secondsBetween * 1000);
         for (int i = 0; i < 10; i++) {
+            now = LocalDateTime.now();
+            formattedDateTime = now.format(formatter);
             System.out.println("The time is: " + formattedDateTime);
             res = post(url, body, cookie);
             System.out.println(res);
