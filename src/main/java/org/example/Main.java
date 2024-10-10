@@ -79,7 +79,7 @@ public class Main {
             if (resCode == 0) {
                 break;
             }
-            sleep(200);
+            sleep(90);
         }
     }
 
